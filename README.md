@@ -48,4 +48,19 @@ If you don't know how to do the following, you should learn how to do the follow
 - P.S. The console will complain about a missing manifest.JSON file until you run `npm run build` in the root directory but it shouldn't affect development
 
 ## Cool Kids Know Stuff
-There are a lot of built in niceties
+There are a lot of built in niceties within this template.
+
+### Plugins
+We use plugins to mutate what the default Vue object is. We can add methods, components, and many other things to the Vue object so that these tools can be accessed through the Vue object versus importing in everything. All of these files can be found in `src/global/public`. As a general practice, we start all plugin methods with a `$`.
+
+- toast.js
+  - what: This is a non-intrusive alert method that briefly shows a message to the user before disappearing without any further action from the user,
+  - example: The user has just updated her personal information in her profile. After the data has saved successfully, you include in the code `this.$toast('Information saved successfully.')` to indicate to the user the information has been saved without any further action from the user.
+  
+- time.js
+  - what: This plugin assists in displaying the date/time in whatever manner you need. The method `$buildDate` allows you to input a Date (could be timestamp) and a string indicating what you want the date to look like and then outputs the resulting string.
+  - example: You want to show the date a message was delivered in the format `September 20th, 1993 at 4:13 am`. You can do this by calling `this.$buildDate(message.delivered, '{fullMonth} {date}{dateEnding}, {year} at {hour}:{minutes} {meridian}')`
+- regex.js
+  - what: To check if a string is of certain format, you can use this plugin by simply inputing your string and declaring what you are checking to see what it is and receive back a boolean.
+  - example: If you want to see if an input is actually a telephone number, use `this.$regex.is(input).a('phone')`.
+- 
