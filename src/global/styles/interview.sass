@@ -1,0 +1,49 @@
+@import '$vars'
+.interview-main
+  padding: 50px
+  .interview-container
+    position: relative
+    .back-home
+      position: absolute
+      top: -15px
+      right: 0
+      font-family: $font-1
+      cursor: pointer
+      background-color: $nh-amber
+      padding: 5px 10px
+      border: black thin solid
+    .top-box
+      display: grid
+      grid-template-columns: max-content max-content
+      align-items: end
+      .title
+        font-family: $font-1
+        font-size: 2.8em
+        padding-right: 10px
+      .subtitle
+        font-family: $font-2
+        font-size: .8em
+        margin-bottom: 3px
+        padding: 5px
+        border-radius: 5px
+    .content
+      display: grid
+      grid-template-columns: 300px auto
+      margin-top: 30px
+      .help-box
+        .help-box-container
+          padding: 15px
+          background-color: $nh-yellow
+          border-radius: 5px
+          padding-bottom: 50px
+          .title
+            font-family: $font-1
+            font-size: 1.3em
+            border-bottom: dashed black thin
+            padding-bottom: 8px
+            margin-bottom: 8px
+          .copy
+            font-family: $font-2
+      .form
+        padding: 0 30px
+        max-width: 700px

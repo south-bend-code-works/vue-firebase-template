@@ -1,0 +1,32 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+    - kms
+    - decrypt
+    - --ciphertext-file=.env.local.enc
+    - --plaintext-file=.env.local
+    - --location=global
+    - --keyring=myring
+    - --key=cloudbuild-env
+  # Insert other build steps here
+  # Install
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install', '-g', 'firebase-tools',]
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['--prefix', './functions', 'install']
+  # Test - if your into that
+  #- name: 'gcr.io/cloud-builders/npm'
+  #  args: ['run', 'test:unit']
+  # Build
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['rebuild', 'node-sass']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+    env: ['NODE_ENV=prod']
+  - name: 'gcr.io/$PROJECT_ID/firebase'
+    args: ['use', 'cw-vue-firebase-template']
+  # Deploy
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'deploy',]

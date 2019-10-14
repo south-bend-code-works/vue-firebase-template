@@ -1,0 +1,32 @@
+@import '$vars'
+.pro-form
+  > .title
+    @extend .font-1-bold
+    font-size: 1.5em
+    margin-bottom: 30px
+  > .form-row
+    margin-bottom: 25px
+    display: grid
+    &.buttons-1
+      justify-items: end
+    &.buttons-2
+      grid-template-columns: auto auto
+      padding-top: 15px
+      > :last-child
+        justify-self: end
+
+.pro-button
+  padding: 8px 15px
+  min-width: 100px
+  width: fit-content
+  font-size: 1em
+  font-family: $font-1
+  text-align: center
+  cursor: pointer
+  user-select: none
+  &.minor
+    background-color: $nh-yellow
+  &.major
+    background-color: $nh-amber
+  &.outline
+    border: thin solid black

@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "cw-vue-firebase-template",
+    "dev": "cw-vue-firebase-template"
+  }
+}
