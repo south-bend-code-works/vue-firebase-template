@@ -71,8 +71,9 @@ export default {
         this.$hideLoading()
         return alert(err.body.message)
       }
+      const authToken = userRes.body.authToken
+      await this.$auth.signInWithCustomToken(authToken)
       this.$hideLoading()
-      console.log(userRes)
     },
   },
 }

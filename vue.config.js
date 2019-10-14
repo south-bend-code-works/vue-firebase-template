@@ -8,6 +8,7 @@ module.exports = {
       .set('@', resolve('src'))
       .set('$common', resolve('src/components/common'))
       .set('$routed', resolve('src/components/routed'))
+      .set('$modals', resolve('src/components/modals'))
       .set('$admin', resolve('src/components/routed/Admin'))
       .set('$file', resolve('src/components/routed/File'))
       .set('$styles', resolve('src/global/styles'))

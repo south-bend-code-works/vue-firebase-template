@@ -1,11 +1,13 @@
 <script>
 import ProToast from '$common/ProToast'
 import Loading from '$common/Loading'
+import ModalsMain from '$modals/Main'
 export default {
   name: 'App',
   components: {
     'pro-toast': ProToast,
     'loading': Loading,
+    'modals-main': ModalsMain,
   },
   methods: {
     getEntities (uid) {
@@ -31,6 +33,7 @@ export default {
 
 <template lang='pug'>
   #app
+    modals-main
     router-view
     pro-toast
     loading

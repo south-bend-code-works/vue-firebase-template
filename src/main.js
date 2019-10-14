@@ -57,3 +57,6 @@ export const ThisVue = new Vue({
   store,
   render: function (h) { return h(App) }
 })//.$mount('#app')
+
+import modals from './global/plugins/modals'
+Vue.use(modals, ThisVue)

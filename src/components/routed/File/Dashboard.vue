@@ -11,9 +11,10 @@ export default {
   },
   methods: {
     onNewFile () {
-      this.$cookies.set('nh-interview', {})
-      this.$cookies.set('nh-started-file', Date.now())
-      console.log('Should move onto some kind of form.')
+      this.$modals.show({
+        name: 'alert',
+        message: 'This is an example of a modal. Instead of showing this alert, the button just pushed should likely have some other functionality.'
+      })
     },
   },
   mounted () {
