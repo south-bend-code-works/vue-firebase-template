@@ -22,12 +22,19 @@ const getUserSecurityHeader = () => {
   })
 }
 
+const VALID_METHODS = ['put', 'post', 'get', 'delete']
 export default {
   install: (Vue) => {
     Vue.prototype.$HTTP = function (options) {
       return new Promise(async (resolve, reject) => {
+        if (!(options.uri || options.fullUri)) {
+          return reject(`Options must include a valid string for either 'uri' or 'fullUri'`)
+        }
+        if (!VALID_METHODS.includes(String(options.method).toLowerCase())) {
+          return reject(`Method must be one of the following: ${VALID_METHODS}`)
+        }
         const args = []
-        args.push(`${BASE_URL}${options.uri}`)
+        args.push(options.fullUri || `${BASE_URL}${options.uri}`)
         if (['put', 'post'].includes(options.method)) {
           args.push(options.body)
         }

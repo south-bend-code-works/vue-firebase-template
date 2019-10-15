@@ -19,6 +19,9 @@ export default {
           a: function (regexType) {
             return test(regexType, val)
           },
+          an: function (regexType) {
+            return test(regexType, val)
+          },
         }
       },
     }

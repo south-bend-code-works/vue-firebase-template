@@ -4,9 +4,8 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = require("firebase-admin");
-const functions = require("firebase-functions");
+const serviceAccount = require("./service-account.json");
 const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG + '');
-const serviceAccount = JSON.parse(functions.config().system.service_account.replace(new RegExp('\'', 'g'), '"') + '');
 admin.initializeApp(Object.assign({}, firebaseConfig, { credential: admin.credential.cert(serviceAccount) }));
 // export * from './database'
 // export * from './files'
