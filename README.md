@@ -48,9 +48,15 @@ If you don't know how to do the following, you should learn how to do the follow
 - P.S. The console will complain about a missing manifest.JSON file until you run `npm run build` in the root directory but it shouldn't affect development
 
 ## Cool Kids Know Stuff
-There are a lot of built in niceties within this template.
+
+### Building
+
+To build the frontend, run `npm run build` from the root of the directory. To build the backend, run `tsc` from the functions directory. When you run `npm run serve` from the functions directory, the files are built during that process. You will have to specifically run `tsc` to have any changes populate in the code.
 
 ### Plugins
+
+There are some built in niceties within this template.
+
 We use plugins to mutate what the default Vue object is. We can add methods, components, and many other things to the Vue object so that these tools can be accessed through the Vue object versus importing in everything. All of these files can be found in `src/global/public`. As a general practice, we start all plugin methods with a `$`.
 
 - toast.js
