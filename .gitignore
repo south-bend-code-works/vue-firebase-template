@@ -28,3 +28,4 @@ functions/.runtimeconfig.json
 functions/firebase-debug.log
 firebase-debug.log
 functions/src/service-account.json
+functions/lib/service-account.json
