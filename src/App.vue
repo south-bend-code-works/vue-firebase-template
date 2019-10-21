@@ -2,12 +2,14 @@
 import ProToast from '$common/ProToast'
 import Loading from '$common/Loading'
 import ModalsMain from '$modals/Main'
+import UncoolAdmin from '../src/uncool/Admin.vue'
 export default {
   name: 'App',
   components: {
     'pro-toast': ProToast,
     'loading': Loading,
     'modals-main': ModalsMain,
+    'uncool-admin': UncoolAdmin,
   },
   methods: {
     getEntities (uid) {
@@ -33,6 +35,7 @@ export default {
 
 <template lang='pug'>
   #app
+    uncool-admin
     modals-main
     router-view
     pro-toast

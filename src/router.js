@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const uncool = import('@/uncool/Admin.vue')
+
 const admin = {
   main: () => import('@/components/routed/Admin/Main.vue'),
 }

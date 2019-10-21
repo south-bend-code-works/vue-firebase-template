@@ -47,7 +47,10 @@ export default {
     .public-home-container
       .content
         .header.font-1-thin Be confident about 
-          span.bold.font-1-bold your file.
+          span.bold.font-1-bold(
+            data-zzz
+            v-uncool='"test"'
+          ) your file.
         .info-action
           .info-holder
             .item File in minutes
@@ -74,6 +77,10 @@ export default {
           .pro-button.outline(
             @click='() => $router.push({name: "PublicSignUp"})'
           ) Get one here
+        .test-image(
+          v-uncool.image='"home-page-image"'
+        )
+          
 </template>
 
 <style lang="sass" scoped>
@@ -121,4 +128,7 @@ export default {
             display: inline
           .pro-button
             margin-left: 25px
+        .test-image 
+          width: 400px
+          height: 400px
 </style>

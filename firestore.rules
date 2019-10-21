@@ -49,5 +49,12 @@ service cloud.firestore {
         }
       }
     }
+    match /uncool/{uncoolId} {
+      allow read: if true
+      allow write: if exists(/databases/$(database)/documents/uncool-users/$(request.auth.uid))
+    }
+    match /uncool-users/{userId} {
+      allow read: if userId == request.auth.uid;
+    }
   }
 }

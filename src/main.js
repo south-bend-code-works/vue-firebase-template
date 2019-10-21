@@ -7,6 +7,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 import './registerServiceWorker'
+import './uncool/admin.sass'
 
 export const firebase = uninitializedFirebase.initializeApp(JSON.parse(process.env.VUE_APP_FIREBASE_CONFIG))
 export const auth = firebase.auth()
@@ -28,9 +29,6 @@ Vue.use(ProCookies)
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
-import ProEmissions from './global/plugins/pro-emissions'
-Vue.use(ProEmissions)
-
 import FormHelpers from './global/plugins/form-helpers'
 Vue.use(FormHelpers)
 
@@ -50,6 +48,9 @@ import loading from './global/plugins/loading'
 Vue.use(loading)
 
 Vue.config.productionTip = false
+
+import uncool from './uncool/uncool'
+Vue.use(uncool, {firebase})
 
 export const ThisVue = new Vue({
   el: '#app',
