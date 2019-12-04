@@ -13,8 +13,7 @@ If you don't know how to do the following, you should learn how to do the follow
 - Enable auth types in a Firebase project.
 
 ### 1) G(i)t your own.
-- Start by clicking the `Fork` button on the Github page for this project.
-- Once you have forked the project into your organization, clone it onto your local machine.
+- Start by downloading the zip of this project.
 
 ### 2) NPM yourself.
 - In the terminal, cd into the root of the project.
