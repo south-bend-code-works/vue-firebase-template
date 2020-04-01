@@ -36,15 +36,13 @@ If you don't know how to do the following, you should learn how to do the follow
 - cd into the `functions` directory
 - Log into Firebase using the account that has the Firebase project you want to use
 - Run `firebase use {{name of your firebase project}}`
-- Create a file in the `functions/src` directory called `service-account.json`.
 - Using the Firebase console, download a new private key under the Service Account tab in Settings
-- Paste contents of the downloaded file into `service-account.json`.
+- Stringify and hide that private key in the Firebase functions config
 
 ### 5) FIRE-IDDUP!!!
 - In the root of the project, run `npm run serve` to start the front end.
 - cd into the `functions` directory and run `npm run serve` to start the back end.
 - Visit localhost:3000 to test it out.
-- P.S. The console will complain about a missing manifest.JSON file until you run `npm run build` in the root directory but it shouldn't affect development
 
 ## Cool Kids Know Stuff
 

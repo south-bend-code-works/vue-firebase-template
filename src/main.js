@@ -49,6 +49,18 @@ Vue.use(regex)
 import loading from './global/plugins/loading'
 Vue.use(loading)
 
+import copy from './global/plugins/copy'
+Vue.use(copy)
+
+import currency from './global/plugins/currency'
+Vue.use(currency)
+
+import dig from './global/plugins/dig'
+Vue.use(dig)
+
+import TinyMethods from './global/plugins/methods'
+Vue.use(TinyMethods)
+
 Vue.config.productionTip = false
 
 export const ThisVue = new Vue({

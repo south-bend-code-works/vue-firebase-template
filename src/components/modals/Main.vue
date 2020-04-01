@@ -1,13 +1,28 @@
 <script>
 import Alert from './Alert'
+import ApplicationViewer from './ApplicationViewer'
+import CardInput from './CardInput'
+import AppealFormFill from './AppealFormFill'
+import DatePicker from './DatePicker'
+import SuperAdmin from './SuperAdmin'
+import EmailPreparer from './EmailPreparer'
+import UploadEvidence from './UploadEvidence'
 export default {
   name: 'ModalsMain',
   components: {
     'alert': Alert,
+    'application-viewer': ApplicationViewer,
+    'card-input': CardInput,
+    'appeal-form-fill': AppealFormFill,
+    'date-picker': DatePicker,
+    'super-admin': SuperAdmin,
+    'email-preparer': EmailPreparer,
+    'upload-evidence': UploadEvidence,
   },
   data () {
     return {
       modalsOptions: {},
+      keys: {},
     }
   },
   computed: {
@@ -15,7 +30,7 @@ export default {
       return Object.keys(this.modalsOptions).length
     },
     componentsList () {
-      return Object.keys(this.$options.components).filter(comp => comp !== 'ModalsMain')
+      return Object.keys(this.$options.components).filter(comp => !['ModalsMain',].includes(comp))
     },
   },
   methods: {
@@ -40,7 +55,31 @@ export default {
         }
         this.$forceUpdate()
       })
+      document.addEventListener('keydown', this.keyListener, true)
+      document.addEventListener('keyup', this.keyListener, true)
     },
+    onContainerClick (comp) {
+      if (this.modalsOptions[comp].hardClose) return
+      
+      this.$modals.hide(comp)
+    },
+    keyListener (e) {
+      if (e.type === 'keydown') {
+        this.keys[e.key] = Date.now()
+        if (this.keys.Meta < this.keys.s) {
+          e.preventDefault()
+          this.$modals.show({
+            name: 'super-admin',
+          })
+        }
+      } else if (e.type === 'keyup') {
+        delete this.keys[e.key]
+      }
+    },
+  },
+  beforeDestroy () {
+    document.removeEventListener('keydown', this.keyListener, true)
+    document.removeEventListener('keyup', this.keyListener, true)
   },
   mounted () {
     this.setUpListeners()
@@ -59,7 +98,7 @@ export default {
         .modals-container(
           v-for='(comp, idx) in componentsList'
           v-if='shouldIncludeComp(comp)'
-          @click='$modals.hide(comp)'
+          @click='onContainerClick(comp)'
           )
             span(
               @click.stop=''
@@ -72,15 +111,17 @@ export default {
 
 <style lang="sass">
   @import '$styles/transitions.sass'
+  @import '$styles/form.sass'
   .modals-main
     height: 100vh
     width: 100vw
     position: fixed
-    z-index: 999
+    z-index: 950
     .modals-container
       height: 100%
       width: 100%
       background-color: transparentize(grey, .5)
+      position: absolute
       > span
         > .modal-main
           background-color: white
@@ -92,17 +133,24 @@ export default {
           max-height: 100vh
           width: 320px
           border-radius: 10px
-          box-shadow: 0 0 15px 0 grey
+          box-shadow: 0 0 15px 0 transparentize(black, .7)
           border: thin grey solid
           overflow-y: scroll
           > .modal-container
             > *
-              padding: 15px
+              padding: 16px
             > .title
-              font-size: 1.2em
+              @extend .font-1-bold
+              font-size: 20px
               color: white
-              background-color: #999
+              background-color: $green
             > .content
+              padding: 24px
+              max-height: calc(100vh - 232px)
+              overflow-y: scroll
+              .description
+                font-size: 14px
+                margin-bottom: 32px
               .content-title
                 font-size: 1.6em
               .input-field
@@ -115,21 +163,24 @@ export default {
                   &.active
                     transform: translateY(-8px) scale(0.8)
             > .action
-              background-color: #999
+              background-color: $green
               color: white
-              display: grid
+              display: flex
               > .button
-                padding: 3px 5px
+                @extend .pro-button
+                border-sizing: border-box
+                padding: 8px 24px
                 background-color: white
-                border-radius: 5px
                 color: black
                 text-align: center
                 cursor: pointer
                 border: white 2px solid
                 transition: all .25s
                 user-select: none
-                &:hover
-                  box-shadow: 0 0 5px 0 #444
+                margin-right: 8px
+                &.minor
+                  background-color: transparent
+                  border-color: transparent
                 &.cancel
                   background-color: transparent
                   color: white

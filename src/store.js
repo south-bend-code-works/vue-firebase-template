@@ -5,13 +5,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    inquiries: [],
-    categories: [],
     auth: null,
     user: null,
-    org: null,
-    userOrgs: [],
-    orgUserRelationships: [],
   },
   mutations: {
     update (state, update) {
@@ -22,20 +17,9 @@ export default new Vuex.Store({
       /**
        * Should unsubscribe to listeners in here if any were instantiated
        */
-      const auth = require('../src/main').auth
-      auth.signOut()
+      const that = require('../src/main').ThisVue
+      that.$auth.signOut()
+      that.$router.push({name: 'Login'})
     },
   },
-  actions: {
-    async getInterviewData (store, {thisVue, next}) {
-      const getAndParseData = (entity) => new Promise(async resolve => resolve((await thisVue.$firestore.collection(entity).get()).docs.map(doc => doc.data())))
-      const categories = await getAndParseData('categories')
-      const inquiries = await getAndParseData('inquiries')
-      store.commit('update', {
-        inquiries,
-        categories,
-      })
-      next()
-    },
-  }
 })

@@ -4,20 +4,27 @@ const express = require("express");
 const corsObj = require("cors");
 const admin = require("firebase-admin");
 const config = JSON.parse(process.env.FIREBASE_CONFIG + '');
-const whitelist = (domains = []) => {
-    if (config && config.projectId) {
-        domains.unshift('https://' + config.projectId + '.firebaseapp.com');
-        domains.unshift('https://' + config.projectId + '.web.app');
-        domains.unshift('http://localhost:8080');
-        domains.unshift('http://localhost:3000');
-        domains.unshift('http://localhost:3001`');
-    }
+const ALLOWED_DOMAINS = [
+    `https://${config.projectId}.firebaseapp.com`,
+    `https://${config.projectId}.web.app`,
+    'https://test.correctpropertytax.com',
+    'https://app.correctpropertytax.com',
+    'http://localhost:8080',
+    'http://localhost:3000',
+    'http://localhost:3001',
+];
+const whitelist = (exceptionDomains = []) => {
+    const domains = [
+        ...exceptionDomains,
+        ...ALLOWED_DOMAINS,
+    ];
     return (origin, cb) => {
         if (domains.indexOf(origin) !== -1) {
             cb(null, true);
         }
         else {
-            cb(new Error('Not allowed by CORS'));
+            console.error(`Not allowed by CORS: ${origin}`);
+            cb(new Error(`Not allowed by CORS: ${origin}`));
         }
     };
 };
@@ -26,7 +33,7 @@ const validateUser = (req, res, next) => {
     const authHeader = req.header('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.', 'Make sure you authorize your request by providing the following HTTP header:', 'Authorization: Bearer <Firebase ID Token>');
-        res.status(403).send('Forbidden');
+        res.status(403).send({ message: 'Not signed in.' });
         return;
     }
     const idToken = authHeader.split('Bearer ')[1];
@@ -44,6 +51,18 @@ const validateUser = (req, res, next) => {
     }).catch((error) => {
         console.error('Error while verifying Firebase ID token:', error);
         res.status(500).send('ID Token correct but no User found associated with token.');
+    });
+};
+/**
+ * This function determines what we believe to be an admin in routers.admin
+ * Should change from project to project
+ */
+const ensureAdmin = (req, res, next) => {
+    return validateUser(req, res, () => {
+        const user = req.user;
+        if (!(user && user.data.role === 'ADMIN'))
+            return res.status(403).send({ message: 'You are not an admin.' });
+        next();
     });
 };
 exports.default = {
@@ -65,5 +84,11 @@ exports.default = {
         userVerifiedRouter.use(ourSites, validateUser);
         return userVerifiedRouter;
     },
+    get admin() {
+        const ourSites = corsObj({ origin: whitelist() });
+        const userVerifiedRouter = express.Router();
+        userVerifiedRouter.use(ourSites, ensureAdmin);
+        return userVerifiedRouter;
+    }
 };
 //# sourceMappingURL=routers.js.map

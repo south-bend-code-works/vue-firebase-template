@@ -11,7 +11,23 @@ export default {
   },
   watch: {
     input (input) {
-      this.$emit('input', input)
+      if ((this.options.type === 'address') && input) {
+        this.chosen = false
+        this.googleClient.geocode({
+          address: input,
+        }).asPromise()
+        .then(res => {
+          this.searchResults = res.json.results
+        })
+      } 
+      else if (this.options.type === 'phone' && input) {
+        const onlyNumbers = input.replace(/\D/g,'')
+        this.input = onlyNumbers
+        this.$emit('input', onlyNumbers)
+      }
+      else {
+        this.$emit('input', input)
+      }
     },
     value (newValue) {
       this.input = newValue
@@ -22,11 +38,17 @@ export default {
       input: null,
       focused: false,
       entered: false,
+      googleClient: null,
+      searchResults: [],
+      chosen: false,
     }
   },
   computed: {
     isActive () {
       return this.focused || this.input
+    },
+    isDate () {
+      return this.options.type === 'date'
     },
     placeholderCopy () {
       return (this.entered && this.error) ? this.error : this.options.title
@@ -41,6 +63,52 @@ export default {
         this.options.onEnter && this.options.onEnter()
       }
     },
+    startListeners () {
+      if (this.options.type === 'address') {
+        this.googleClient = require('@google/maps').createClient({
+          key: JSON.parse(process.env.VUE_APP_FIREBASE_CONFIG).apiKey,
+          Promise: Promise,
+        })
+      }
+    },
+    onResultClick (result) {
+      this.options.onAddressSelect && this.options.onAddressSelect(result)
+      const address = result.formatted_address
+      this.input = address
+      this.$nextTick(() => {
+        this.chosen = true
+        this.$emit('input', address)
+        this.searchResults = []
+      })
+    },
+    onOptionClick (option) {
+      if (this.options.multiple) {
+        if (!this.input) {
+          this.input = []
+        }
+        const alreadyInList = this.input.includes(option.value)
+        this.input[alreadyInList ? 'remove' : 'push'](option.value)
+      } else {
+        this.input = option.value === this.input ? '' : option.value
+      }
+    },
+    isOptionChosen (option) {
+      return this.options.multiple ? this.input && this.input.includes(option.value) : this.input === option.value
+    },
+    getStyle () {
+      if (this.options.type !== 'textarea') return {}
+
+      if (!this.$refs.textarea) return {}
+
+      const heightOfTextarea = this.$refs.textarea.offsetHeight
+      const titleHeight = heightOfTextarea + 8
+
+      return {bottom: `${titleHeight}px`}
+    },
+  },
+  mounted () {
+    this.input = this.value // mostly just for textarea
+    this.startListeners()
   },
 }
 </script>
@@ -55,9 +123,32 @@ export default {
       )
         .placeholder(
           :class='isActive ? "active" : ""'
+          :style='getStyle()'
         ) {{placeholderCopy}}
+        .radio-holder(
+          v-if='options.type === "checkbox"'
+        )
+          .placeholder.prompt {{options.prompt}}
+          .options-holder
+            .option(
+              v-for='option in options.options'
+              :class='isOptionChosen(option) ? "chosen" : ""'
+              @click='onOptionClick(option)'
+            ) 
+              .box
+                i.material-icons {{isOptionChosen(option) ? "check_box" : "check_box_outline_blank"}}
+              .name {{option.name}}
+        textarea(
+          ref='textarea'
+          v-else-if='options.type === "textarea"'
+          v-model='input'
+          @keydown='handleKey'
+          @focus='focused = true'
+          @blur='focused = false;entered = true'
+          :style='{height: options.height || "100px"}'
+        )
         input(
-          v-if='options.type === "number"'
+          v-else-if='options.type === "number"'
           type='number'
           v-model='input'
           @keydown='handleKey'
@@ -65,11 +156,35 @@ export default {
           @blur='focused = false;entered = true'
         )
         input(
-          v-if='options.type === "password"'
+          v-else-if='options.type === "password"'
           type='password'
           v-model='input'
           @keydown='handleKey'
           @focus='focused = true'
+          @blur='focused = false;entered = true'
+        )
+        input(
+          v-else-if='options.type === "phone"'
+          v-model='input'
+          @keydown='handleKey'
+          @focus='focused = true'
+          @blur='focused = false;entered = true'
+        )
+        input(
+          v-else-if='options.type === "address"'
+          type='text'
+          autocomplete="off"
+          v-model='input'
+          @keydown='handleKey'
+          @focus='focused = true'
+          @blur='focused = false;entered = true'
+        )
+        input(
+          v-else-if='isDate'
+          type='date'
+          v-model='input'
+          @keydown='handleKey'
+          @focus='onFocus'
           @blur='focused = false;entered = true'
         )
         input(
@@ -79,12 +194,42 @@ export default {
           @focus='focused = true'
           @blur='focused = false;entered = true'
         )
+      .search-results-holder(
+        v-if='(options.type === "address") && input && !chosen'
+      )
+        .search-result.no-results(
+          v-if='!searchResults.length && !chosen'
+        ) No results
+        .search-result(
+          v-for='result in searchResults'
+          @click='onResultClick(result)'
+        ) {{result.formatted_address}}
 </template>
 
 <style lang="sass" scoped>
   @import '$vars'
   .pro-input-main
     .pro-input-container
+      position: relative
+      .search-results-holder
+        border-radius: 6px
+        border: thin black solid
+        width: 100%
+        overflow: scroll
+        position: absolute
+        background-color: white
+        z-index: 2
+        box-sizing: border-box
+        .search-result
+          padding: 8px 24px
+          cursor: pointer
+          font-size: 14px
+          &.no-results
+            &:hover
+              background-color: white
+              cursor: default
+          &:hover
+            background-color: $lightgrey
       .input-holder
         position: relative
         margin-top: 5px
@@ -92,37 +237,60 @@ export default {
           .placeholder
             color: red !important
           > input
-            border-bottom-color: red
+            border-color: red
             &:focus
-              border-bottom-color: red !important
+              border-color: red !important
+        .radio-holder
+          .options-holder
+            padding: 8px 0
+            .option
+              font-size: 14px
+              padding: 4px 0
+              display: grid
+              grid-template-columns: min-content auto
+              align-items: center
+              cursor: pointer
+              &.chosen
+                @extend .font-1-bold
+                color: $green
+              .box
+                height: 24px
+              .name
+                padding-left: 8px
         .placeholder
+          @extend .font-1-bold
           user-select: none
           position: absolute
-          top: 4px
-          color: #BBB
+          bottom: 48px
           transition: all .25s
           font-family: $font-2
-          &.active
-            font-size: .7em
-            top: -12px
-            color: #AAA
+          font-size: 14px
+          &.prompt
+            top: 0px
+            position: relative
+        > textarea
+          width: 100%
+          box-sizing: border-box
+          resize: none
+          padding: 8px
         > input
+          padding: 12px 24px
+        > input, > textarea
           margin-bottom: 0
-          height: 2rem
           z-index: 1
           position: relative
-          padding-bottom: 3px
           color: #000
           background-color: transparent
-          border: none
-          border-bottom: thin black solid
+          border: thin $mediumgrey solid
+          box-sizing: border-box
+          border-radius: 6px
           width: 100%
           font-family: $font-1
-          font-size: 1.2em
+          font-size: 14px
           &:focus
             transition: .25s all
-            border-bottom: 1px solid black !important
-            box-shadow: none !important
+            box-shadow: 0 0 5px 0px $green
+            border-color: $green
             color: #000
             outline: none
 

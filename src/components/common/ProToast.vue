@@ -11,7 +11,7 @@ export default {
     readyListener () {
       this.$proOn('toast', (options) => {
         let toast = options
-        if (typeof options === 'string') {
+        if ((typeof options === 'string') || !options) {
           toast = {
             copy: options,
             time: 2000,
@@ -50,7 +50,6 @@ export default {
 
 <style lang="sass" scoped>
   @import '$styles/transitions.sass'
-  @import '$vars'
   .pro-toast-main
     position: fixed
     bottom: 20px
@@ -60,17 +59,19 @@ export default {
     left: 50%
     transform: translateX(-50%)
     transition: .25s all
+    z-index: 951
     .pro-toast-container
       position: relative
       display: grid
       align-items: end
       .toast
+        @extend .font-1-bold
         background-color: black
-        color: $nh-yellow
+        color: white
         margin-top: 15px
         padding: 5px 15px
-        font-size: 1.3em
         transition: all .25s
+        border-radius: 8px
 
 </style>
 

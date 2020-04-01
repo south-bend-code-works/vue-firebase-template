@@ -96,11 +96,12 @@ export default {
       const date = new Date(ts)
       return {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1,
         shortMonth: MONTHS[date.getMonth()].short,
-        fullMonth: MONTHS[date.getMonth()].long,
+        longMonth: MONTHS[date.getMonth()].long,
         date: date.getDate(),
         dateEnding: getDateEnding(date.getDate()),
+        longDate: date.getDate() + getDateEnding(date.getDate()),
         day: date.getDay(),
         hour: (date.getHours() + 12) % 12,
         meridian: date.getHours() < 12 ? 'am' : 'pm',

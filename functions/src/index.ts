@@ -1,12 +1,14 @@
 import * as admin from 'firebase-admin'
-import * as serviceAccount from './service-account.json'
+// next line is imported for the side effects that populate process.env.FIREBASE_CONFIG
+import 'firebase-functions' // tslint:disable-line
+import cert from './utils/firebase-cert'
 
-const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG + '')
-
+const firebaseConfig = JSON.parse(String(process.env.FIREBASE_CONFIG))
 admin.initializeApp({
   ...firebaseConfig,
-  credential: admin.credential.cert(serviceAccount as any)
+  credential: admin.credential.cert(cert)
 })
-// export * from './database'
-// export * from './files'
-export * from './users'
+
+export * from './test'
+export * from './applications'
+export * from './forms'

@@ -10,16 +10,24 @@ export default {
     'modals-main': ModalsMain,
   },
   methods: {
-    getEntities (uid) {
-      return uid
-    },
+    getUser (uid) {
+      return new Promise(async resolve => {
+        resolve((await this.$firestore.collection('users').doc(uid).get()).data())
+      })
+    }, 
     async listenForUser () {
       this.$auth.onAuthStateChanged(async (auth) => {
         this.$store.commit('update', {auth})
         if (auth) {
-          const entities = await this.getEntities(auth.uid)
-          console.log(entities)
-          this.$router.push({name: 'FileDashboard'})
+          const user = await this.getUser(auth.uid)
+          this.$store.commit('update', {user})
+
+          const defaultRoute = 'AdminApplicants'
+          if (this.$route.name === defaultRoute) return //don't duplicate
+
+          if (!['Login'].includes(this.$route.name)) return //don't navigate if the page has a plan
+          
+          this.$router.push(this.$route.query.redirect || {name: 'AdminApplicants'})
         }
       })
     },
@@ -42,9 +50,12 @@ export default {
 <style lang="sass">
   @import '$vars'
   body
-    background-color: $nh-yellow
     margin: 0
     font-family: $font-1
   #app
     position: relative
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button
+    -webkit-appearance: none
+    margin: 0
 </style>

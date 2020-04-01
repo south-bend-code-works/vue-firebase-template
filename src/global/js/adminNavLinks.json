@@ -1,0 +1,10 @@
+[
+  {
+    "links": [
+      {
+        "name": "Applicants",
+        "route": "AdminApplicants"
+      }
+    ]
+  }
+]

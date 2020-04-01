@@ -27,10 +27,7 @@ export default {
       .loading-container(
         v-if='seeLoading'
       )
-        .image
-          img(
-            src='@/assets/svg/loading-dots.svg'
-          )
+        .image Loading...
 </template>
 
 <style lang="sass" scoped>

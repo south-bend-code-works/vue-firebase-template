@@ -5,7 +5,7 @@
     font-size: 1.5em
     margin-bottom: 30px
   > .form-row
-    margin-bottom: 25px
+    margin-bottom: 32px
     display: grid
     &.buttons-1
       justify-items: end
@@ -16,17 +16,25 @@
         justify-self: end
 
 .pro-button
-  padding: 8px 15px
-  min-width: 100px
+  @extend .font-1-bold
+  padding: 12px 24px
+  //min-width: 100px
   width: fit-content
-  font-size: 1em
-  font-family: $font-1
+  font-size: 14px
   text-align: center
   cursor: pointer
   user-select: none
+  border-radius: 8px
   &.minor
-    background-color: $nh-yellow
+    //border: $green thin solid
+    color: $green
+    &.white
+      color: white
   &.major
-    background-color: $nh-amber
+    background-color: $green
+    color: white
   &.outline
     border: thin solid black
+  &.delete
+    background-color: red
+    color: white

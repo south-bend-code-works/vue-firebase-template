@@ -6,6 +6,7 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
+      .set('$img', resolve('src/assets/img'))
       .set('$common', resolve('src/components/common'))
       .set('$routed', resolve('src/components/routed'))
       .set('$modals', resolve('src/components/modals'))
@@ -20,5 +21,12 @@ module.exports = {
     msTileColor: '#000000',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/global/styles/vars.sass"`,
+      },
+    },
   },
 }
