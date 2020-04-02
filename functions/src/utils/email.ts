@@ -37,7 +37,7 @@ class EmailOptions extends Object {
 }
 
 // uses newer api so that i can use html
-export const send3 = (options: EmailOptions) => new Promise(async (resolve, reject) => {
+export const send = (options: EmailOptions) => new Promise(async (resolve, reject) => {
   const message = {
     html: options.html || '_',
     to: options.to,
@@ -61,39 +61,6 @@ export const send3 = (options: EmailOptions) => new Promise(async (resolve, reje
     reject(err.response.body)
   }
 })
-
-export const send = (options: EmailOptions) => {
-  return new Promise((resolve, reject) => {
-    const request = sendGrid.emptyRequest()
-    request.method = 'POST'
-    request.path = '/v3/mail/send'
-    request.body = {
-      personalizations: [
-        {
-          to: [
-            {
-              email: options.to,
-            }
-          ],
-          bcc: options.bcc ? [{
-            email: options.bcc,
-          }] : null,
-          dynamic_template_data: options.substitutions,
-        }
-      ],
-      subject: options.subject || '',
-      from: { email: options.fromEmail || 'noreply@correctpropertytax.com', name: options.fromName || 'Correct Property Tax' },
-      template_id: templates[options.template] || options.template,
-    }
-    sendGrid.API(request, (err) => {
-      if (err) {
-        console.error(`Problem with sending email to: ${options.to}`, err['response']['body'])
-        reject(err)
-      }
-      resolve()
-    })
-  })
-}
 
 // this is a tool so that we can retrieve admin emails to send notifs to
 const localNotifiees = ['josh@southbendcodeschool.com']

@@ -83,3 +83,8 @@ We use plugins to mutate what the default Vue object is. We can add methods, com
   - example: For a new sign up, you have a form for the user to fill out that needs to be sent to your backend for user creation. All the necessary form data is stored in `this.form`. So, to make the call, the code you need is `this.$HTTP({method: 'post', uri: 'users', body: this.form})`. The plugin returns a Promise so you can set your callbacks or your awaits in order to handle failures and successes.
 - form-helpers.js
   - what: This plugin is pretty specific to how Joshua Mullet creates and validates forms. The explanation is long and arduous so if you would like to learn how to use it, checkout the plugin and SignUp.vue to see an example of it in action.
+- copy.js
+  - what: This plugin includes the method `$copyToClipboard` and it does exactly that.
+  - example: If you displaying some info that you know will likely just be copied and pasted (and security credential), you can include a button beside it that when pressed runs `this.$copyToClipboard(apiKey)` and then that data will be copied to the users clipboard.
+- methods.js
+  - what: This file contains plugins that are pretty simple one-liners. These methods don't really deserve a whole file to themselves. This file should also include project specific methods if there are any. The two methods in their currently are `$clone` and `$maybeFunc`. `$clone` was built to copy existing Arrays and Objects so that they can be mutated without affecting the original Array or Object. `$maybeFunc` is used in the scenario where an argument may be a function or not. If it is a function, it runs the function and returns the value. If it is not a function, it simply returns the value.
