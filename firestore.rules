@@ -1,52 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
-  //match /databases/{database}/documents/private/entities/orgs/{orgId}
   match /databases/{database}/documents {
-    function getEntity(type, id) {
-      return get(/databases/$(database)/documents/$(type)/$(id))
+
+    function isAdmin () {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN'
     }
 
-    function getPrivateEntity(type, id) {
-      return get(/databases/$(database)/documents/private/entities/$(type)/$(id))
-    }
-
-    function getOrgsUsers(orgId) {
-      return get(/databases/$(database)/documents/private/entities/orgs/$(orgId)).data.users
-    }
-
-    match /categories/{categoryId} {
-      allow read: if true;
-      allow write: if false;
-    }
-    match /files/{fileId} {
-      allow read: if get(/databases/$(database)/documents/roles/$(resource.data.org_id + request.auth.uid)).data.title == 'OWNER'
-    }
-    match /limits/{limitId} {
-      allow read, write: if false;
-    }
-    match /orgUserRelationships/{orgUserRelationshipId} {
-      allow read, write: if false;
-    }
-    match /orgs/{orgId} {
-      // allow read: if (request.auth.uid in get(/databases/$(database)/documents/private/entities/orgs/$(orgId)).data.users)
-      allow read: if true;
-    }
     match /users/{userId} {
       allow read: if true;
     }
-    match /roles/{roleId} {
-      // We can allow a more public read by using the roles.org_id, combined with request.auth.uid, and checked for existence
-      // maybe the following:
-      allow read: if resource.data.user_id == request.auth.uid || exists(/databases/$(database)/documents/roles/$(resource.data.org_id + request.auth.uid))
+
+    match /applications/{applicationId} {
+      allow read: if true;
+      allow update: if isAdmin()
+      allow delete: if isAdmin()
     }
-    match /private {
-      match /entities {
-        match /users/{userId} {
-          allow read: if userId == request.auth.uid;
-        }
-        match /orgs/{orgId} {
-          allow read: if exists(/databases/$(database)/documents/roles/$(resource.data.id + request.auth.uid));
-        }
+    match /system {
+      match /prices {
+        allow read: if true;
       }
     }
   }
