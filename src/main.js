@@ -61,6 +61,9 @@ Vue.use(dig)
 import TinyMethods from './global/plugins/methods'
 Vue.use(TinyMethods)
 
+import keyWatcher from './global/plugins/key-watcher'
+Vue.use(keyWatcher)
+
 Vue.config.productionTip = false
 
 export const ThisVue = new Vue({
