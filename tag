@@ -23,8 +23,7 @@ else
 fi
 
 git fetch --tag
-versions_string=$(git tag)
-current_version=$(echo $versions_string | rev | cut -d' ' -f 1 | rev)
+current_version=$(git describe --abbrev=0 --tags)
 
 major_number=$(echo $current_version | cut -d'.' -f 1)
 minor_number=$(echo $current_version | cut -d'.' -f 2)
