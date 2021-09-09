@@ -1,6 +1,10 @@
 <script>
+import Spinner from '$common/Spinner.vue'
 export default {
   name: 'Loading',
+  components: {
+    'spinner': Spinner,
+  },
   data () {
     return {
       seeLoading: false,
@@ -27,7 +31,7 @@ export default {
       .loading-container(
         v-if='seeLoading'
       )
-        .image Loading...
+        spinner
 </template>
 
 <style lang="sass" scoped>
