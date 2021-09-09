@@ -10,15 +10,5 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    match /applications/{applicationId} {
-      allow read: if true;
-      allow update: if isAdmin()
-      allow delete: if isAdmin()
-    }
-    match /system {
-      match /prices {
-        allow read: if true;
-      }
-    }
   }
 }

@@ -2,8 +2,8 @@
   {
     "links": [
       {
-        "name": "Applicants",
-        "route": "AdminApplicants"
+        "name": "Display Name",
+        "route": "RouteName"
       }
     ]
   }
