@@ -25,7 +25,7 @@ const templates = {
 class EmailOptions extends Object {
 }
 // uses newer api so that i can use html
-exports.send3 = (options) => new Promise(async (resolve, reject) => {
+exports.send = (options) => new Promise(async (resolve, reject) => {
     const message = {
         html: options.html || '_',
         to: options.to,
@@ -48,38 +48,6 @@ exports.send3 = (options) => new Promise(async (resolve, reject) => {
         reject(err.response.body);
     }
 });
-exports.send = (options) => {
-    return new Promise((resolve, reject) => {
-        const request = exports.sendGrid.emptyRequest();
-        request.method = 'POST';
-        request.path = '/v3/mail/send';
-        request.body = {
-            personalizations: [
-                {
-                    to: [
-                        {
-                            email: options.to,
-                        }
-                    ],
-                    bcc: options.bcc ? [{
-                            email: options.bcc,
-                        }] : null,
-                    dynamic_template_data: options.substitutions,
-                }
-            ],
-            subject: options.subject || '',
-            from: { email: options.fromEmail || 'noreply@correctpropertytax.com', name: options.fromName || 'Correct Property Tax' },
-            template_id: templates[options.template] || options.template,
-        };
-        exports.sendGrid.API(request, (err) => {
-            if (err) {
-                console.error(`Problem with sending email to: ${options.to}`, err['response']['body']);
-                reject(err);
-            }
-            resolve();
-        });
-    });
-};
 // this is a tool so that we can retrieve admin emails to send notifs to
 const localNotifiees = ['josh@southbendcodeschool.com'];
 exports.getNotifiees = (type) => new Promise(async (resolve, reject) => {

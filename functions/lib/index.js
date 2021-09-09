@@ -10,6 +10,4 @@ const firebase_cert_1 = require("./utils/firebase-cert");
 const firebaseConfig = JSON.parse(String(process.env.FIREBASE_CONFIG));
 admin.initializeApp(Object.assign({}, firebaseConfig, { credential: admin.credential.cert(firebase_cert_1.default) }));
 __export(require("./test"));
-__export(require("./applications"));
-__export(require("./forms"));
 //# sourceMappingURL=index.js.map
