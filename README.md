@@ -32,6 +32,9 @@ If you don't know how to do the following, you should learn how to do the follow
   VUE_APP_FIREBASE_CONFIG="{"apiKey":"some_api_value","authDomain":...,...,...}"
   FIREBASE_CONFIG="{"apiKey":"some_api_value","authDomain":...,...,...}"
   ```
+- `firebase init` and set up your new firebase project. A couple notes:
+  - Use typescript for functions.
+  - Set `dist` as the public folder for hosting.
 ### 4) Identify yourself AGAIN (backend)
 - cd into the `functions` directory
 - Log into Firebase using the account that has the Firebase project you want to use
