@@ -1,6 +1,5 @@
 import {Request, Response} from 'express'
 import * as admin from 'firebase-admin'
-import { getFirebaseFileBase64, send3 } from '../../utils/email'
 import * as fs from 'fs'
 import * as path from 'path'
 

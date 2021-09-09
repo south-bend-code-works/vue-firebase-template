@@ -6,8 +6,6 @@ const config = JSON.parse(process.env.FIREBASE_CONFIG + '')
 const ALLOWED_DOMAINS = [
   `https://${config.projectId}.firebaseapp.com`,
   `https://${config.projectId}.web.app`,
-  'https://test.correctpropertytax.com',
-  'https://app.correctpropertytax.com',
   'http://localhost:8080',
   'http://localhost:3000',
   'http://localhost:3001',

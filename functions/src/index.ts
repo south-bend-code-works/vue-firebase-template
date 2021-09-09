@@ -10,5 +10,3 @@ admin.initializeApp({
 })
 
 export * from './test'
-export * from './applications'
-export * from './forms'
